@@ -7,9 +7,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.tecprime.avaliacaotecprime.domain.enums.TipoCliente;
+import com.tecprime.avaliacaotecprime.domain.Endereco;
+import com.tecprime.avaliacaotecprime.domain.Cidade;
+import com.tecprime.avaliacaotecprime.domain.Estado;
 import com.tecprime.avaliacaotecprime.domain.Categoria;
+import com.tecprime.avaliacaotecprime.domain.Cliente;
 import com.tecprime.avaliacaotecprime.domain.Produto;
 import com.tecprime.avaliacaotecprime.repositories.CategoriaRepository;
+import com.tecprime.avaliacaotecprime.repositories.CidadeRepository;
+import com.tecprime.avaliacaotecprime.repositories.ClienteRepository;
+import com.tecprime.avaliacaotecprime.repositories.EnderecoRepository;
+import com.tecprime.avaliacaotecprime.repositories.EstadoRepository;
 import com.tecprime.avaliacaotecprime.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -17,9 +26,17 @@ public class AvalicaotecprimeApplication implements CommandLineRunner{
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	@Autowired
+	private EstadoRepository estadoRepository;
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(AvalicaotecprimeApplication.class, args);
@@ -46,6 +63,29 @@ public class AvalicaotecprimeApplication implements CommandLineRunner{
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
+		
+		Estado est1 = new Estado(null, "Minas Gerais");
+		Estado est2 = new Estado(null, "São Paulo");
+		
+		Cidade c1 = new Cidade(null, "Uberlândia", est1);
+		Cidade c2 = new Cidade(null, "São Paulo", est2);
+		Cidade c3 = new Cidade(null, "Campinas", est2);
+		
+		est1.getCidades().addAll(Arrays.asList(c1));
+		est2.getCidades().addAll(Arrays.asList(c2, c3));
+		
+		Cliente cli1 = new Cliente(null, "Isabel Cristina", "isabel@gmail.com", "56108648015", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("32113345", "34988440993"));
+		
+		Cliente cli2 = new Cliente(null, "Sara Costa", "sara.gomes@gmail.com", "66368817046", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("32113360", "34991763673"));
+		
+		Endereco e1 = new Endereco(null, "Flores", "300", "Apt 303", "Jardim", "38400000", cli1, c1);
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38400001", cli1, c2);
+		Endereco e3 = new Endereco(null, "Avenida Floriano", "2105", null, "Centro", "38400010", cli2, c2);
+		
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 		
 	}
 
