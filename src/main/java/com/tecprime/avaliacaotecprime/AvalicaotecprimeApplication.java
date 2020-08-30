@@ -36,13 +36,13 @@ public class AvalicaotecprimeApplication implements CommandLineRunner{
 		Produto p3 = new Produto(null, "Sucos", 8.00);
 		Produto p4 = new Produto(null, "Refrigerantes", 12.00);
 		
-		cat1.getProdutos().addAll(Arrays.asList(p1, p2));
-		cat2.getProdutos().addAll(Arrays.asList(p3, p4));
+		cat1.getProdutos().addAll(Arrays.asList(p3, p4));
+		cat2.getProdutos().addAll(Arrays.asList(p1, p2));
 		
-		p1.getCategorias().addAll(Arrays.asList(cat1));
-		p2.getCategorias().addAll(Arrays.asList(cat1));
-		p3.getCategorias().addAll(Arrays.asList(cat2));
-		p3.getCategorias().addAll(Arrays.asList(cat2));
+		p1.getCategorias().addAll(Arrays.asList(cat2));
+		p2.getCategorias().addAll(Arrays.asList(cat2));
+		p3.getCategorias().addAll(Arrays.asList(cat1));
+		p4.getCategorias().addAll(Arrays.asList(cat1));
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
