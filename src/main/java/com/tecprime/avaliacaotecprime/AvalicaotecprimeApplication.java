@@ -1,5 +1,6 @@
 package com.tecprime.avaliacaotecprime;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,18 +8,25 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.tecprime.avaliacaotecprime.domain.enums.TipoCliente;
-import com.tecprime.avaliacaotecprime.domain.Endereco;
-import com.tecprime.avaliacaotecprime.domain.Cidade;
-import com.tecprime.avaliacaotecprime.domain.Estado;
 import com.tecprime.avaliacaotecprime.domain.Categoria;
+import com.tecprime.avaliacaotecprime.domain.Cidade;
 import com.tecprime.avaliacaotecprime.domain.Cliente;
+import com.tecprime.avaliacaotecprime.domain.Endereco;
+import com.tecprime.avaliacaotecprime.domain.Estado;
+import com.tecprime.avaliacaotecprime.domain.Pagamento;
+import com.tecprime.avaliacaotecprime.domain.PagamentoComBoleto;
+import com.tecprime.avaliacaotecprime.domain.PagamentoComCartao;
+import com.tecprime.avaliacaotecprime.domain.Pedido;
 import com.tecprime.avaliacaotecprime.domain.Produto;
+import com.tecprime.avaliacaotecprime.domain.enums.EstadoPagamento;
+import com.tecprime.avaliacaotecprime.domain.enums.TipoCliente;
 import com.tecprime.avaliacaotecprime.repositories.CategoriaRepository;
 import com.tecprime.avaliacaotecprime.repositories.CidadeRepository;
 import com.tecprime.avaliacaotecprime.repositories.ClienteRepository;
 import com.tecprime.avaliacaotecprime.repositories.EnderecoRepository;
 import com.tecprime.avaliacaotecprime.repositories.EstadoRepository;
+import com.tecprime.avaliacaotecprime.repositories.PagamentoRepository;
+import com.tecprime.avaliacaotecprime.repositories.PedidoRepository;
 import com.tecprime.avaliacaotecprime.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class AvalicaotecprimeApplication implements CommandLineRunner{
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	
 	public static void main(String[] args) {
@@ -86,6 +98,22 @@ public class AvalicaotecprimeApplication implements CommandLineRunner{
 		
 		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2019 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2019 19:37"), cli1, e2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2019 00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));  
 		
 	}
 
