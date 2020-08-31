@@ -3,10 +3,12 @@ package com.tecprime.avaliacaotecprime.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.tecprime.avaliacaotecprime.domain.Categoria;
 import com.tecprime.avaliacaotecprime.repositories.CategoriaRepository;
+import com.tecprime.avaliacaotecprime.services.exceptions.DataIntegrityException;
 import com.tecprime.avaliacaotecprime.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -30,6 +32,15 @@ public class CategoriaService {
 		find(obj.getId());
 		return repo.save(obj);
 	}
-		
+
+	public void delete(Integer id) {
+		find(id);
+		try {
+			repo.deleteById(id);
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos");
+		}
+	}
 	
 }
