@@ -18,11 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.tecprime.avaliacaotecprime.domain.Cliente;
-import com.tecprime.avaliacaotecprime.domain.Endereco;
-//import com.tecprime.avaliacaotecprime.domain.ItemPedido;
-
-import com.tecprime.avaliacaotecprime.domain.Pedido;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -48,8 +43,8 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "endereco_de_entrega_id")
 	private Endereco enderecoDeEntrega;
 	
-//	@OneToMany(mappedBy = "id.pedido")
-//	private Set<ItemPedido> itens = new HashSet<>();
+	@OneToMany(mappedBy = "id.pedido")
+ 	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Pedido() {
 	}
@@ -109,13 +104,13 @@ public class Pedido implements Serializable {
 	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
-//	public Set<ItemPedido> getItens() {
-//		return itens;
-//	}
-//
-//	public void setItens(Set<ItemPedido> itens) {
-//		this.itens = itens;
-//	}
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
 	
 
 	@Override

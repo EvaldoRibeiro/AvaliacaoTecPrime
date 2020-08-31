@@ -13,6 +13,7 @@ import com.tecprime.avaliacaotecprime.domain.Cidade;
 import com.tecprime.avaliacaotecprime.domain.Cliente;
 import com.tecprime.avaliacaotecprime.domain.Endereco;
 import com.tecprime.avaliacaotecprime.domain.Estado;
+import com.tecprime.avaliacaotecprime.domain.ItemPedido;
 import com.tecprime.avaliacaotecprime.domain.Pagamento;
 import com.tecprime.avaliacaotecprime.domain.PagamentoComBoleto;
 import com.tecprime.avaliacaotecprime.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.tecprime.avaliacaotecprime.repositories.CidadeRepository;
 import com.tecprime.avaliacaotecprime.repositories.ClienteRepository;
 import com.tecprime.avaliacaotecprime.repositories.EnderecoRepository;
 import com.tecprime.avaliacaotecprime.repositories.EstadoRepository;
+import com.tecprime.avaliacaotecprime.repositories.ItemPedidoRepository;
 import com.tecprime.avaliacaotecprime.repositories.PagamentoRepository;
 import com.tecprime.avaliacaotecprime.repositories.PedidoRepository;
 import com.tecprime.avaliacaotecprime.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class AvalicaotecprimeApplication implements CommandLineRunner{
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	
 	public static void main(String[] args) {
@@ -114,6 +118,20 @@ public class AvalicaotecprimeApplication implements CommandLineRunner{
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));  
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p4, 0.00, 5, 20.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 6, 8.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 0.00, 4, 80.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+			
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		
 	}
 
